@@ -35,13 +35,17 @@ impl AstNode for Document {
     }
 }
 impl Document {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn section(&self) -> Option<Section> {
         support::child(&self.syntax)
@@ -77,13 +81,17 @@ impl AstNode for Section {
     }
 }
 impl Section {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -107,13 +115,17 @@ impl AstNode for Paragraph {
     }
 }
 impl Paragraph {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -157,13 +169,17 @@ impl AstNode for Headline {
     }
 }
 impl Headline {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn section(&self) -> Option<Section> {
         support::child(&self.syntax)
@@ -179,36 +195,6 @@ impl Headline {
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct HeadlineTitle {
-    pub(crate) syntax: SyntaxNode,
-}
-impl AstNode for HeadlineTitle {
-    type Language = OrgLanguage;
-    fn can_cast(kind: SyntaxKind) -> bool {
-        kind == HEADLINE_TITLE
-    }
-    fn cast(node: SyntaxNode) -> Option<HeadlineTitle> {
-        Self::can_cast(node.kind()).then(|| HeadlineTitle { syntax: node })
-    }
-    fn syntax(&self) -> &SyntaxNode {
-        &self.syntax
-    }
-}
-impl HeadlineTitle {
-    /// Equals to `self.syntax().text_range().start()`
-    pub fn start(&self) -> TextSize {
-        self.syntax.text_range().start()
-    }
-    /// Equals to `self.syntax().text_range().end()`
-    pub fn end(&self) -> TextSize {
-        self.syntax.text_range().end()
-    }
-    pub fn headline(&self) -> Option<Headline> {
-        self.syntax.parent().and_then(Headline::cast)
     }
 }
 
@@ -229,13 +215,17 @@ impl AstNode for PropertyDrawer {
     }
 }
 impl PropertyDrawer {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn node_properties(&self) -> AstChildren<NodeProperty> {
         support::children(&self.syntax)
@@ -259,13 +249,17 @@ impl AstNode for NodeProperty {
     }
 }
 impl NodeProperty {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -286,13 +280,17 @@ impl AstNode for Planning {
     }
 }
 impl Planning {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -313,13 +311,17 @@ impl AstNode for OrgTable {
     }
 }
 impl OrgTable {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -363,13 +365,17 @@ impl AstNode for OrgTableRow {
     }
 }
 impl OrgTableRow {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -390,13 +396,17 @@ impl AstNode for OrgTableCell {
     }
 }
 impl OrgTableCell {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -417,13 +427,17 @@ impl AstNode for List {
     }
 }
 impl List {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn items(&self) -> AstChildren<ListItem> {
         support::children(&self.syntax)
@@ -467,13 +481,17 @@ impl AstNode for ListItem {
     }
 }
 impl ListItem {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -494,13 +512,17 @@ impl AstNode for Drawer {
     }
 }
 impl Drawer {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -521,13 +543,17 @@ impl AstNode for DynBlock {
     }
 }
 impl DynBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -568,13 +594,17 @@ impl AstNode for Keyword {
     }
 }
 impl Keyword {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -595,13 +625,17 @@ impl AstNode for BabelCall {
     }
 }
 impl BabelCall {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -622,13 +656,17 @@ impl AstNode for AffiliatedKeyword {
     }
 }
 impl AffiliatedKeyword {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -649,13 +687,17 @@ impl AstNode for TableEl {
     }
 }
 impl TableEl {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -679,13 +721,17 @@ impl AstNode for Clock {
     }
 }
 impl Clock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -709,13 +755,17 @@ impl AstNode for FnDef {
     }
 }
 impl FnDef {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -759,13 +809,17 @@ impl AstNode for Comment {
     }
 }
 impl Comment {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn text(&self) -> Option<super::Token> {
         super::token(&self.syntax, TEXT)
@@ -812,13 +866,17 @@ impl AstNode for Rule {
     }
 }
 impl Rule {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn post_blank(&self) -> usize {
         super::blank_lines(&self.syntax)
@@ -842,13 +900,17 @@ impl AstNode for FixedWidth {
     }
 }
 impl FixedWidth {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn text(&self) -> Option<super::Token> {
         super::token(&self.syntax, TEXT)
@@ -895,13 +957,17 @@ impl AstNode for SpecialBlock {
     }
 }
 impl SpecialBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -942,13 +1008,17 @@ impl AstNode for QuoteBlock {
     }
 }
 impl QuoteBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -989,13 +1059,17 @@ impl AstNode for CenterBlock {
     }
 }
 impl CenterBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -1036,13 +1110,17 @@ impl AstNode for VerseBlock {
     }
 }
 impl VerseBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -1083,13 +1161,17 @@ impl AstNode for CommentBlock {
     }
 }
 impl CommentBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -1130,13 +1212,17 @@ impl AstNode for ExampleBlock {
     }
 }
 impl ExampleBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -1177,13 +1263,17 @@ impl AstNode for ExportBlock {
     }
 }
 impl ExportBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -1224,13 +1314,17 @@ impl AstNode for SourceBlock {
     }
 }
 impl SourceBlock {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn caption(&self) -> Option<AffiliatedKeyword> {
         affiliated_keyword(&self.syntax, |k| k == "CAPTION")
@@ -1271,13 +1365,17 @@ impl AstNode for InlineCall {
     }
 }
 impl InlineCall {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1298,13 +1396,17 @@ impl AstNode for InlineSrc {
     }
 }
 impl InlineSrc {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1325,13 +1427,17 @@ impl AstNode for Link {
     }
 }
 impl Link {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1352,13 +1458,17 @@ impl AstNode for Cookie {
     }
 }
 impl Cookie {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1379,13 +1489,17 @@ impl AstNode for RadioTarget {
     }
 }
 impl RadioTarget {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1406,13 +1520,17 @@ impl AstNode for FnRef {
     }
 }
 impl FnRef {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1433,13 +1551,17 @@ impl AstNode for Macros {
     }
 }
 impl Macros {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1460,13 +1582,17 @@ impl AstNode for Snippet {
     }
 }
 impl Snippet {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1487,13 +1613,17 @@ impl AstNode for Target {
     }
 }
 impl Target {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1514,13 +1644,17 @@ impl AstNode for Bold {
     }
 }
 impl Bold {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1541,13 +1675,17 @@ impl AstNode for Strike {
     }
 }
 impl Strike {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1568,13 +1706,17 @@ impl AstNode for Italic {
     }
 }
 impl Italic {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1595,13 +1737,17 @@ impl AstNode for Underline {
     }
 }
 impl Underline {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1622,13 +1768,17 @@ impl AstNode for Verbatim {
     }
 }
 impl Verbatim {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1649,13 +1799,17 @@ impl AstNode for Code {
     }
 }
 impl Code {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn text(&self) -> Option<super::Token> {
         super::token(&self.syntax, TEXT)
@@ -1679,13 +1833,17 @@ impl AstNode for Timestamp {
     }
 }
 impl Timestamp {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
     pub fn year_start(&self) -> Option<super::Token> {
         super::token(&self.syntax, TIMESTAMP_YEAR)
@@ -1736,13 +1894,17 @@ impl AstNode for LatexEnvironment {
     }
 }
 impl LatexEnvironment {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1763,13 +1925,17 @@ impl AstNode for LatexFragment {
     }
 }
 impl LatexFragment {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1790,13 +1956,17 @@ impl AstNode for Entity {
     }
 }
 impl Entity {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1817,13 +1987,17 @@ impl AstNode for LineBreak {
     }
 }
 impl LineBreak {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1844,13 +2018,17 @@ impl AstNode for Superscript {
     }
 }
 impl Superscript {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }
 
@@ -1871,12 +2049,16 @@ impl AstNode for Subscript {
     }
 }
 impl Subscript {
-    /// Equals to `self.syntax().text_range().start()`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to `self.syntax().text_range().end()`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 }

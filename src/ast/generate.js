@@ -33,11 +33,6 @@ const nodes = [
     post_blank: true,
   },
   {
-    struct: "HeadlineTitle",
-    kind: ["HEADLINE_TITLE"],
-    parent: [["headline", "Headline"]],
-  },
-  {
     struct: "PropertyDrawer",
     kind: ["PROPERTY_DRAWER"],
     children: [["node_properties", "NodeProperty"]],
@@ -307,13 +302,17 @@ impl AstNode for ${node.struct} {
     fn syntax(&self) -> &SyntaxNode { &self.syntax }
 }
 impl ${node.struct} {
-    /// Equals to \`self.syntax().text_range().start()\`
+    /// Beginning position of this element
     pub fn start(&self) -> TextSize {
         self.syntax.text_range().start()
     }
-    /// Equals to \`self.syntax().text_range().end()\`
+    /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Raw text of this element
+    pub fn raw(&self) -> String {
+        self.syntax.to_string()
     }
 `;
   for (const [method, kind] of node.token || []) {
