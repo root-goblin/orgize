@@ -1,4 +1,4 @@
-use crate::{ast::*, SyntaxToken};
+use crate::ast::*;
 
 #[non_exhaustive]
 #[derive(Clone, PartialEq, Eq, Debug)]
@@ -54,7 +54,7 @@ pub enum Event {
     Enter(Container),
     Leave(Container),
 
-    Text(SyntaxToken),
+    Text(Token),
     Macros(Macros),
     Cookie(Cookie),
     InlineCall(InlineCall),

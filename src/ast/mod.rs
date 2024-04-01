@@ -73,7 +73,7 @@ pub fn filter_token(
 /// A simple wrapper of `Option<SyntaxToken>`
 ///
 /// It acts like a `token.text()` when inner is `Some(token)`, and an empty string when `None`.
-#[derive(Default, Eq)]
+#[derive(Default, Eq, Clone)]
 pub struct Token(pub(crate) Option<SyntaxToken>);
 
 impl Token {

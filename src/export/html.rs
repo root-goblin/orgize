@@ -274,7 +274,7 @@ impl Traverser for HtmlExport {
             Event::Leave(Container::Link(_)) => self.output += "</a>",
 
             Event::Text(text) => {
-                let _ = write!(&mut self.output, "{}", HtmlEscape(text.text()));
+                let _ = write!(&mut self.output, "{}", HtmlEscape(text));
             }
 
             Event::LineBreak(_) => self.output += "<br/>",
