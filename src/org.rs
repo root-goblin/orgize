@@ -1,5 +1,5 @@
 use rowan::ast::AstNode;
-use rowan::GreenNode;
+use rowan::{GreenNode, TextSize};
 
 use crate::ast::Document;
 use crate::config::ParseConfig;
@@ -65,5 +65,42 @@ impl Org {
             }
         }
         find(SyntaxNode::new_root(self.green.clone()))
+    }
+
+    /// Returns node in given offset
+    ///
+    /// ```rust
+    /// use orgize::{Org, ast::Headline};
+    ///
+    /// let org = Org::parse("\n\n* foo\n* bar");
+    ///
+    /// assert!(org.node_at_offset::<Headline>(0).is_none());
+    ///
+    /// let hdl = org.node_at_offset::<Headline>(2).unwrap();
+    /// assert_eq!(hdl.title_raw(), "foo");
+    ///
+    /// let hdl = org.node_at_offset::<Headline>(9).unwrap();
+    /// assert_eq!(hdl.title_raw(), "bar");
+    ///
+    /// assert!(org.node_at_offset::<Headline>(999).is_none());
+    /// ```
+    pub fn node_at_offset<N: AstNode<Language = OrgLanguage>>(
+        &self,
+        offset: impl Into<TextSize>,
+    ) -> Option<N> {
+        let offset = offset.into();
+        fn find<N: AstNode<Language = OrgLanguage>>(
+            node: SyntaxNode,
+            offset: TextSize,
+        ) -> Option<N> {
+            if !node.text_range().contains(offset) {
+                None
+            } else if N::can_cast(node.kind()) {
+                N::cast(node)
+            } else {
+                node.children().find_map(|node| find(node, offset))
+            }
+        }
+        find(SyntaxNode::new_root(self.green.clone()), offset)
     }
 }
