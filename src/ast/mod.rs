@@ -6,6 +6,7 @@ mod affiliated_keyword;
 mod block;
 mod clock;
 mod comment;
+mod document;
 mod drawer;
 mod entity;
 mod fixed_width;
