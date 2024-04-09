@@ -285,4 +285,17 @@ impl Timestamp {
             )?,
         ))
     }
+
+    /// Returns chrono::TimeDelta between timestamp start and end
+    ///
+    /// ```rust
+    /// use orgize::{Org, ast::Timestamp};
+    ///
+    /// let ts = Org::parse("[2003-09-16 Tue 09:39-10:39]").first_node::<Timestamp>().unwrap();
+    /// assert_eq!(ts.time_delta().unwrap().num_hours(), 1);
+    /// ```
+    #[cfg(feature = "chrono")]
+    pub fn time_delta(&self) -> Option<chrono::TimeDelta> {
+        Some(self.end_to_chrono()? - self.start_to_chrono()?)
+    }
 }
