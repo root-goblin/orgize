@@ -5,6 +5,7 @@ mod config;
 mod entities;
 pub mod export;
 mod org;
+mod replace;
 mod syntax;
 #[cfg(test)]
 mod tests;
@@ -14,6 +15,7 @@ pub use rowan;
 
 pub use config::ParseConfig;
 pub use org::Org;
+pub use rowan::{TextRange, TextSize};
 pub use syntax::{
     SyntaxElement, SyntaxElementChildren, SyntaxKind, SyntaxNode, SyntaxNodeChildren, SyntaxToken,
 };
