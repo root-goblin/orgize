@@ -49,6 +49,45 @@ let hdl = org.first_node::<Headline>().unwrap();
 assert_eq!(hdl.todo_keyword().unwrap(), "TASK");
 ```
 
+## Traverse
+
+Use `org.traverse(&mut traversal)` to walk through the syntax tree.
+
+```rust
+use orgize::{
+    export::{from_fn, Container, Event},
+    Org,
+};
+
+let mut hdl_count = 0;
+let mut handler = from_fn(|event| {
+    if matches!(event, Event::Enter(Container::Headline(_))) {
+        hdl_count += 1;
+    }
+});
+Org::parse("* 1\n** 2\n*** 3\n****4").traverse(&mut handler);
+assert_eq!(hdl_count, 3);
+```
+
+## Modify
+
+Use `org.replace_range(TextRange::new(start, end), "new_text")` to modify the syntax tree:
+
+```rust
+use orgize::{Org, ParseConfig, ast::Headline, TextRange};
+
+let mut org = Org::parse("hello\n* world");
+
+let hdl = org.first_node::<Headline>().unwrap();
+org.replace_range(hdl.text_range(), "** WORLD!");
+
+let hdl = org.first_node::<Headline>().unwrap();
+assert_eq!(hdl.level(), 2);
+
+org.replace_range(TextRange::up_to(hdl.start()), "");
+assert_eq!(org.to_org(), "** WORLD!");
+```
+
 ## Render to html
 
 Call the `Org::to_html` function to export org element tree to html:
@@ -69,3 +108,12 @@ Checkout `examples/html-slugify.rs` on how to customizing html export process.
 - **`chrono`**: adds the ability to convert `Timestamp` into `chrono::NaiveDateTime`, disabled by default.
 
 - **`indexmap`**: adds the ability to convert `PropertyDrawer` properties into `IndexMap`, disabled by default.
+
+## API compatibility
+
+`element.syntax()` exposes access to the internal syntax tree, along with some rowan low-level APIs.
+This can be useful for intricate tasks.
+
+However, the structure of the internal syntax tree can change between different versions of the library.
+Because of this, the result of `element.syntax()` doesn't follow semantic versioning,
+which means updates might break your code if it relies on this method.
