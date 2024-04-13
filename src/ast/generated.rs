@@ -5,7 +5,7 @@
 use crate::syntax::{OrgLanguage, SyntaxKind, SyntaxKind::*, SyntaxNode, SyntaxToken};
 use rowan::{
     ast::{support, AstChildren, AstNode},
-    TextSize,
+    TextRange, TextSize,
 };
 
 fn affiliated_keyword(
@@ -42,6 +42,10 @@ impl Document {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -89,6 +93,10 @@ impl Section {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -122,6 +130,10 @@ impl Paragraph {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -177,6 +189,10 @@ impl Headline {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -223,6 +239,10 @@ impl PropertyDrawer {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -257,6 +277,10 @@ impl NodeProperty {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -288,6 +312,10 @@ impl Planning {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -318,6 +346,10 @@ impl OrgTable {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -373,6 +405,10 @@ impl OrgTableRow {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -404,6 +440,10 @@ impl OrgTableCell {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -434,6 +474,10 @@ impl List {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -489,6 +533,10 @@ impl ListItem {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -520,6 +568,10 @@ impl Drawer {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -550,6 +602,10 @@ impl DynBlock {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -602,6 +658,10 @@ impl Keyword {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -632,6 +692,10 @@ impl BabelCall {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -664,6 +728,10 @@ impl AffiliatedKeyword {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -694,6 +762,10 @@ impl TableEl {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -729,6 +801,10 @@ impl Clock {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -762,6 +838,10 @@ impl FnDef {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -816,6 +896,10 @@ impl Comment {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -874,6 +958,10 @@ impl Rule {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -907,6 +995,10 @@ impl FixedWidth {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -965,6 +1057,10 @@ impl SpecialBlock {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1015,6 +1111,10 @@ impl QuoteBlock {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1067,6 +1167,10 @@ impl CenterBlock {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1117,6 +1221,10 @@ impl VerseBlock {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1169,6 +1277,10 @@ impl CommentBlock {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1219,6 +1331,10 @@ impl ExampleBlock {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1271,6 +1387,10 @@ impl ExportBlock {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1321,6 +1441,10 @@ impl SourceBlock {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1373,6 +1497,10 @@ impl InlineCall {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1403,6 +1531,10 @@ impl InlineSrc {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1435,6 +1567,10 @@ impl Link {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1465,6 +1601,10 @@ impl Cookie {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1497,6 +1637,10 @@ impl RadioTarget {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1527,6 +1671,10 @@ impl FnRef {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1559,6 +1707,10 @@ impl Macros {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1589,6 +1741,10 @@ impl Snippet {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1621,6 +1777,10 @@ impl Target {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1651,6 +1811,10 @@ impl Bold {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1683,6 +1847,10 @@ impl Strike {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1713,6 +1881,10 @@ impl Italic {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1745,6 +1917,10 @@ impl Underline {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1776,6 +1952,10 @@ impl Verbatim {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1806,6 +1986,10 @@ impl Code {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1840,6 +2024,10 @@ impl Timestamp {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1902,6 +2090,10 @@ impl LatexEnvironment {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1932,6 +2124,10 @@ impl LatexFragment {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -1964,6 +2160,10 @@ impl Entity {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -1994,6 +2194,10 @@ impl LineBreak {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
@@ -2026,6 +2230,10 @@ impl Superscript {
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
     }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
+    }
     /// Raw text of this element
     pub fn raw(&self) -> String {
         self.syntax.to_string()
@@ -2056,6 +2264,10 @@ impl Subscript {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {

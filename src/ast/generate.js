@@ -274,7 +274,7 @@ let content = `//! generated file, do not modify it directly
 #![allow(clippy::all)]
 #![allow(unused)]
 
-use rowan::{ast::{support, AstChildren, AstNode}, TextSize};
+use rowan::{ast::{support, AstChildren, AstNode}, TextSize, TextRange};
 use crate::syntax::{OrgLanguage, SyntaxKind, SyntaxKind::*, SyntaxNode, SyntaxToken};
 
 fn affiliated_keyword(node: &SyntaxNode, filter: impl Fn(&str) -> bool) -> Option<AffiliatedKeyword> {
@@ -309,6 +309,10 @@ impl ${node.struct} {
     /// Ending position of this element
     pub fn end(&self) -> TextSize {
         self.syntax.text_range().end()
+    }
+    /// Range of this element
+    pub fn text_range(&self) -> TextRange {
+        self.syntax.text_range()
     }
     /// Raw text of this element
     pub fn raw(&self) -> String {
