@@ -205,13 +205,7 @@ pub trait Traverser {
                             take_control!();
                         }
                     }
-                    NODE_PROPERTY | AFFILIATED_KEYWORD => {}
-
-                    kind => debug_assert!(
-                        !kind.is_element() && !kind.is_object(),
-                        "{:?} is not handled",
-                        kind
-                    ),
+                    _ => {}
                 }
             }
             SyntaxElement::Token(token) => {
