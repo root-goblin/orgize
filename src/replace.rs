@@ -113,9 +113,10 @@ impl Org {
     /// assert_eq!(hdl.level(), 5);
     /// ```
     pub fn replace_range(&mut self, range: TextRange, replace_with: impl AsRef<str>) {
+        let replace_with = replace_with.as_ref();
         match (
             RangeShape::new(self.document().syntax, range),
-            ReplaceWithShape::new(replace_with.as_ref()),
+            ReplaceWithShape::new(replace_with),
         ) {
             (
                 RangeShape::ExactHeadline { headline, level },
@@ -124,23 +125,27 @@ impl Org {
             | (
                 RangeShape::InsideHeadline { headline, level },
                 ReplaceWithShape::IncludeHeadline { level: new_level },
-            ) if level < new_level => self.replace_headline(headline, range, replace_with.as_ref()),
+            ) if level < new_level => self.replace_headline(headline, range, replace_with),
 
             (
                 RangeShape::ExactHeadline { headline, level },
                 ReplaceWithShape::ExactHeadline { level: new_level },
-            ) if level <= new_level => {
-                self.replace_headline(headline, range, replace_with.as_ref())
+            ) if level <= new_level
+            // non-last headline must ends with a newline
+                && (headline.end() == self.document().end()
+                    || replace_with.ends_with(&['\n', '\r'])) =>
+            {
+                self.replace_headline(headline, range, replace_with)
             }
 
             (
                 RangeShape::InsideHeadline { headline, level },
                 ReplaceWithShape::ExactHeadline { level: new_level },
             ) if level <= new_level && follows_newline(headline.syntax(), range.start()) => {
-                self.replace_headline(headline, range, replace_with.as_ref())
+                self.replace_headline(headline, range, replace_with)
             }
 
-            _ => self.full_parse(range, replace_with.as_ref()),
+            _ => self.full_parse(range, replace_with),
         }
     }
 
@@ -315,4 +320,7 @@ fn replace() {
     t!("* abc \n** \n|edf|", "* abc\n* abc");
     t!("* abc \n** |edf|", "* abc");
     t!("* abc \n** |edf|", "* abc\n* abc");
+    t!("* abc \n|* edf\n|* gh", "* hg");
+    t!("* abc \n|* edf\n|* gh", "* hg\n");
+    t!("* abc \n* edf\n|* gh|", "* hg");
 }
