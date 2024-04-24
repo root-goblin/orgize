@@ -1,6 +1,8 @@
-use crate::SyntaxKind;
-
-use super::{filter_token, ExportBlock, SourceBlock, Token};
+use super::{
+    filter_token, CenterBlock, CommentBlock, DynBlock, ExampleBlock, ExportBlock, QuoteBlock,
+    SourceBlock, SpecialBlock, SyntaxKind, Token, VerseBlock,
+};
+use rowan::TextSize;
 
 impl SourceBlock {
     /// ```rust
@@ -107,3 +109,35 @@ impl ExportBlock {
             .find_map(filter_token(SyntaxKind::EXPORT_BLOCK_TYPE))
     }
 }
+
+macro_rules! impl_content_border {
+    ($block:ident) => {
+        impl $block {
+            /// Beginning position of block content
+            pub fn content_start(&self) -> TextSize {
+                self.syntax
+                    .first_child()
+                    .map(|n| n.text_range().end())
+                    .unwrap_or_else(|| self.syntax.text_range().start())
+            }
+
+            /// Ending position of block content
+            pub fn content_end(&self) -> TextSize {
+                self.syntax
+                    .last_child()
+                    .map(|n| n.text_range().start())
+                    .unwrap_or_else(|| self.syntax.text_range().end())
+            }
+        }
+    };
+}
+
+impl_content_border!(SourceBlock);
+impl_content_border!(ExportBlock);
+impl_content_border!(CenterBlock);
+impl_content_border!(CommentBlock);
+impl_content_border!(ExampleBlock);
+impl_content_border!(QuoteBlock);
+impl_content_border!(SpecialBlock);
+impl_content_border!(VerseBlock);
+impl_content_border!(DynBlock);

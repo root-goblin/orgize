@@ -1,7 +1,7 @@
+use rowan::TextSize;
 use std::collections::HashMap;
 
-use super::{filter_token, Drawer, SyntaxKind, Token};
-use crate::ast::PropertyDrawer;
+use super::{filter_token, Drawer, PropertyDrawer, SyntaxKind, Token};
 
 impl PropertyDrawer {
     /// ```rust
@@ -61,6 +61,22 @@ impl PropertyDrawer {
     pub fn to_index_map(&self) -> indexmap::IndexMap<Token, Token> {
         self.iter().collect()
     }
+
+    /// Beginning position of drawer content
+    pub fn content_start(&self) -> TextSize {
+        self.syntax
+            .first_child()
+            .map(|n| n.text_range().end())
+            .unwrap_or_else(|| self.syntax.text_range().start())
+    }
+
+    /// Ending position of drawer content
+    pub fn content_end(&self) -> TextSize {
+        self.syntax
+            .last_child()
+            .map(|n| n.text_range().start())
+            .unwrap_or_else(|| self.syntax.text_range().end())
+    }
 }
 
 impl Drawer {
@@ -80,6 +96,31 @@ impl Drawer {
                     .find(|e| e.kind() == SyntaxKind::TEXT)
             })
             .map(|t| Token(Some(t)))
+            .unwrap_or_default()
+    }
+
+    /// Beginning position of drawer content
+    pub fn content_start(&self) -> TextSize {
+        self.syntax
+            .first_child()
+            .map(|n| n.text_range().end())
+            .unwrap_or_else(|| self.syntax.text_range().start())
+    }
+
+    /// Ending position of drawer content
+    pub fn content_end(&self) -> TextSize {
+        self.syntax
+            .last_child()
+            .map(|n| n.text_range().start())
+            .unwrap_or_else(|| self.syntax.text_range().end())
+    }
+
+    /// Raw text of drawer content
+    pub fn content_raw(&self) -> String {
+        self.syntax
+            .children()
+            .find(|n| n.kind() == SyntaxKind::DRAWER_CONTENT)
+            .map(|n| n.to_string())
             .unwrap_or_default()
     }
 }
