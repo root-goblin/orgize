@@ -6,7 +6,7 @@ use std::fmt::Write as _;
 use super::event::{Container, Event};
 use super::TraversalContext;
 use super::Traverser;
-use crate::SyntaxKind;
+use crate::{SyntaxElement, SyntaxKind, SyntaxNode};
 
 /// A wrapper for escaping sensitive characters in html.
 ///
@@ -72,6 +72,22 @@ impl HtmlExport {
 
     pub fn finish(self) -> String {
         self.output
+    }
+
+    /// Render syntax node to html string
+    ///
+    /// ```rust
+    /// use orgize::{Org, ast::Bold, export::HtmlExport, rowan::ast::AstNode};
+    ///
+    /// let org = Org::parse("* /hello/ *world*");
+    /// let bold = org.first_node::<Bold>().unwrap();
+    /// let mut html = HtmlExport::default();
+    /// html.render(bold.syntax());
+    /// assert_eq!(html.finish(), "<b>world</b>");
+    /// ```
+    pub fn render(&mut self, node: &SyntaxNode) {
+        let mut ctx = TraversalContext::default();
+        self.element(SyntaxElement::Node(node.clone()), &mut ctx);
     }
 }
 
