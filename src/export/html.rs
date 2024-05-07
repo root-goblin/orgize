@@ -326,6 +326,9 @@ impl Traverser for HtmlExport {
                 let _ = write!(&mut self.output, "{}", &latex.syntax);
             }
 
+            // ignores keyword
+            Event::Enter(Container::Keyword(_)) => ctx.skip(),
+
             Event::Entity(entity) => self.output += entity.html(),
 
             _ => {}
