@@ -120,7 +120,7 @@ fn node_property_node(input: Input) -> IResult<Input, GreenElement, ()> {
     b.ws(ws1);
     b.push(colon1);
 
-    if name.ends_with("+") {
+    if name.ends_with('+') {
         let (plus, name) = name.take_split(name.len() - 1);
         b.text(name);
         b.token(PLUS, plus);
