@@ -58,7 +58,7 @@ token_parser!(percent2_token, "%%", PERCENT2);
 token_parser!(backslash_token, "\\", BACKSLASH);
 token_parser!(underscore_token, "_", UNDERSCORE);
 // token_parser!(star_token, "*", STAR);
-token_parser!(plus_token, "+", PLUS);
+// token_parser!(plus_token, "+", PLUS);
 token_parser!(minus_token, "-", MINUS);
 token_parser!(colon_token, ":", COLON);
 token_parser!(colon2_token, "::", COLON2);
