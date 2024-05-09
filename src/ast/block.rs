@@ -117,6 +117,40 @@ impl ExportBlock {
             .flat_map(|n| n.children_with_tokens())
             .find_map(filter_token(SyntaxKind::EXPORT_BLOCK_TYPE))
     }
+
+    /// Returns export block contents
+    ///
+    /// ```rust
+    /// use orgize::{Org, ast::ExportBlock};
+    ///
+    /// let block = Org::parse(r#"
+    /// #+begin_export html
+    /// <style>.red { color: red; }</style>
+    /// #+end_export
+    /// "#).first_node::<ExportBlock>().unwrap();
+    /// assert_eq!(block.value(), "<style>.red { color: red; }</style>\n");
+    ///
+    /// let block = Org::parse(r#"
+    /// #+BEGIN_EXPORT org
+    /// ,#+BEGIN_EXPORT html
+    /// <style>.red { color: red; }</style>
+    /// ,#+END_EXPORT
+    /// #+END_EXPORT
+    /// "#).first_node::<ExportBlock>().unwrap();
+    /// assert_eq!(block.value(), r#"#+BEGIN_EXPORT html
+    /// <style>.red { color: red; }</style>
+    /// #+END_EXPORT
+    /// "#);
+    /// ```
+    pub fn value(&self) -> String {
+        self.syntax
+            .children()
+            .find(|e| e.kind() == SyntaxKind::BLOCK_CONTENT)
+            .into_iter()
+            .flat_map(|n| n.children_with_tokens())
+            .filter_map(filter_token(SyntaxKind::TEXT))
+            .fold(String::new(), |acc, value| acc + &value)
+    }
 }
 
 macro_rules! impl_content_border {
