@@ -3,6 +3,8 @@ mod generated;
 mod affiliated_keyword;
 mod block;
 mod clock;
+#[cfg(feature = "syntax-org-fc")]
+mod cloze;
 mod comment;
 mod document;
 mod drawer;
@@ -20,6 +22,8 @@ mod snippet;
 mod table;
 mod timestamp;
 
+#[cfg(feature = "syntax-org-fc")]
+pub use cloze::*;
 pub use generated::*;
 pub use headline::*;
 pub use rowan::ast::support::*;

@@ -2,6 +2,8 @@
 
 pub mod block;
 pub mod clock;
+#[cfg(feature = "syntax-org-fc")]
+pub mod cloze;
 pub mod combinator;
 pub mod comment;
 pub mod cookie;
@@ -79,6 +81,7 @@ pub enum SyntaxKind {
     R_ANGLE,      // '>'
     L_CURLY,      // '{'
     R_CURLY,      // '}'
+    L_CURLY2,     // '{{'
     L_CURLY3,     // '{{{'
     R_CURLY3,     // '}}}'
     L_ANGLE2,     // '<<'
@@ -226,6 +229,9 @@ pub enum SyntaxKind {
     TIMESTAMP_DELAY_MARK,
     TIMESTAMP_VALUE,
     TIMESTAMP_UNIT,
+
+    #[cfg(feature = "syntax-org-fc")]
+    CLOZE,
 }
 
 impl From<SyntaxKind> for rowan::SyntaxKind {

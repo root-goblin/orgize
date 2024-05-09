@@ -152,6 +152,7 @@ pub fn minimal_object_nodes(input: Input) -> Vec<GreenElement> {
 /// - Text Markup (bold code strike verbatim underline italic)
 /// - Line Breaks
 /// - Subscript and Superscript
+/// - Cloze (if `syntax-org-fc` is enabled)
 ///
 /// // todo:
 /// - Citations
@@ -166,7 +167,15 @@ pub fn standard_object_nodes(input: Input) -> Vec<GreenElement> {
             b'=' if emphasis::verify_pre(pre.s) => verbatim_node(i),
             b'~' if emphasis::verify_pre(pre.s) => code_node(i),
             b'@' => snippet_node(i),
-            b'{' => macros_node(i),
+            b'{' => {
+                cfg_if::cfg_if! {
+                    if #[cfg(feature = "syntax-org-fc")] {
+                        macros_node(i).or_else(|_| super::cloze::cloze_node(i))
+                    } else {
+                        macros_node(i)
+                    }
+                }
+            }
             b'<' => radio_target_node(i)
                 .or_else(|_| target_node(i))
                 .or_else(|_| timestamp_diary_node(i))

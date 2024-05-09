@@ -67,4 +67,7 @@ pub enum Event {
     LatexFragment(LatexFragment),
     LatexEnvironment(LatexEnvironment),
     Entity(Entity),
+
+    #[cfg(feature = "syntax-org-fc")]
+    Cloze(Cloze),
 }

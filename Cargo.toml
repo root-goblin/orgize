@@ -21,6 +21,7 @@ default = []
 indexmap = ["dep:indexmap"]
 chrono = ["dep:chrono"]
 tracing = ["dep:tracing"]
+syntax-org-fc = []
 
 [dependencies]
 bytecount = "0.6"

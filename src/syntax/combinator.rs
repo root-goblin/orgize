@@ -42,6 +42,8 @@ token_parser!(r_parens_token, ")", R_PARENS);
 token_parser!(l_angle_token, "<", L_ANGLE);
 token_parser!(r_angle_token, ">", R_ANGLE);
 token_parser!(l_curly_token, "{", L_CURLY);
+#[cfg(feature = "syntax-org-fc")]
+token_parser!(l_curly2_token, "{{", L_CURLY2);
 token_parser!(r_curly_token, "}", R_CURLY);
 token_parser!(l_curly3_token, "{{{", L_CURLY3);
 token_parser!(r_curly3_token, "}}}", R_CURLY3);
