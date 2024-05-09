@@ -56,6 +56,7 @@
         list-style: none;
         margin: 0;
         padding: 0;
+        overflow-x: auto;
       }
 
       #tabsList span {
@@ -102,6 +103,7 @@
           </span>
           <span data-value="html">HTML</span>
           <span data-value="syntax">Syntax</span>
+          <span data-value="traverse">Traverse</span>
           <div id="spacer"></div>
           <div id="took"></div>
         </div>
@@ -161,7 +163,23 @@
             .split("\n")
             .map((line) =>
               line.replace(
-                /([A-Z0-9_-]*)\@(\d+)\.\.(\d+)/,
+                /([A-Za-z0-9_-]*)\@(\d+)\.\.(\d+)/,
+                (text, name, start, end) =>
+                  `<b>${name}</b><a data-range="${start}-${end}">@${start}..${end}</a>`
+              )
+            )
+            .join("\n");
+
+          result.innerHTML = "<pre>" + syntax + "</pre>";
+          break;
+        }
+
+        case "traverse": {
+          const syntax = escapeHtml(org.traverse())
+            .split("\n")
+            .map((line) =>
+              line.replace(
+                /([A-Za-z0-9_-]*)\@(\d+)\.\.(\d+)/,
                 (text, name, start, end) =>
                   `<b>${name}</b><a data-range="${start}-${end}">@${start}..${end}</a>`
               )
@@ -193,6 +211,7 @@
         endPos.row,
         endPos.column
       );
+      editor.gotoLine(startPos.row, startPos.column, true);
       editor.selection.setRange(range);
     });
 
