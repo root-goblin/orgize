@@ -2,29 +2,35 @@ use rowan::ast::AstNode;
 
 use crate::Org;
 
-use super::{Document, Keyword, SyntaxKind};
+use super::{Document, Keyword};
 
 impl Document {
+    /// Returns an iterator of keywords in zeroth section
+    ///
     /// ```rust
     /// use orgize::{Org, ast::Document};
     ///
     /// let org = Org::parse(r#"
     /// #+TITLE: hello
     /// #+TITLE: world
-    /// #+DATE: tody
-    /// #+AUTHOR: poi"#);
+    /// #+DATE: today
+    /// #+AUTHOR: poi
+    /// * headline
+    /// #+SOMETHING:"#);
     /// let doc = org.first_node::<Document>().unwrap();
     /// assert_eq!(doc.keywords().count(), 4);
     /// ```
     pub fn keywords(&self) -> impl Iterator<Item = Keyword> {
-        self.syntax
-            .first_child()
-            .filter(|c| c.kind() == SyntaxKind::SECTION)
+        self.section()
             .into_iter()
-            .flat_map(|section| section.children().filter_map(Keyword::cast))
+            .flat_map(|section| section.syntax.children().filter_map(Keyword::cast))
     }
 
-    /// Returns the value in `#+TITLE`
+    /// Returns the value in top-level `#+TITLE`
+    ///
+    /// Multiple `#+TITLE` are joined with spaces.
+    ///
+    /// Returns `None` if file doesn't contain `#+TITLE`
     ///
     /// ```rust
     /// use orgize::{Org, ast::Document};

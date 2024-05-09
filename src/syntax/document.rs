@@ -2,6 +2,7 @@ use nom::{combinator::opt, IResult};
 
 use super::{
     combinator::{blank_lines, node, GreenElement},
+    drawer::property_drawer_node,
     headline::{headline_node, section_node},
     input::Input,
     SyntaxKind::*,
@@ -16,7 +17,16 @@ pub fn document_node(input: Input) -> IResult<Input, GreenElement, ()> {
 }
 
 fn document_node_base(input: Input) -> IResult<Input, GreenElement, ()> {
+    if input.is_empty() {
+        return Ok((input, node(DOCUMENT, [])));
+    }
+
     let mut children = vec![];
+
+    let (input, property_drawer) = opt(property_drawer_node)(input)?;
+    if let Some(property_drawer) = property_drawer {
+        children.push(property_drawer);
+    }
 
     let (input, pre_blank) = blank_lines(input)?;
 

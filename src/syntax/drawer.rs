@@ -87,7 +87,7 @@ fn drawer_node_base(input: Input) -> IResult<Input, GreenElement, ()> {
 fn property_drawer_node_base(input: Input) -> IResult<Input, GreenElement, ()> {
     let (input, (begin, name)) = drawer_begin_node(input)?;
 
-    if name != "PROPERTIES" {
+    if !name.eq_ignore_ascii_case("properties") {
         return Err(nom::Err::Error(()));
     }
 
@@ -97,8 +97,10 @@ fn property_drawer_node_base(input: Input) -> IResult<Input, GreenElement, ()> {
     children.extend(&mut it);
     let (input, _) = it.finish()?;
     let (input, end) = drawer_end_node(input)?;
+    let (input, post_blank) = blank_lines(input)?;
 
     children.push(end);
+    children.extend(post_blank);
 
     Ok((input, node(PROPERTY_DRAWER, children)))
 }

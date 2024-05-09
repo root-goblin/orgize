@@ -57,6 +57,9 @@ impl Document {
     pub fn first_headline(&self) -> Option<Headline> {
         support::child(&self.syntax)
     }
+    pub fn properties(&self) -> Option<PropertyDrawer> {
+        support::child(&self.syntax)
+    }
     pub fn last_headline(&self) -> Option<Headline> {
         super::last_child(&self.syntax)
     }
