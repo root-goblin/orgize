@@ -74,10 +74,19 @@ impl SourceBlock {
     /// ```rust
     /// use orgize::{Org, ast::SourceBlock};
     ///
-    /// let block = Org::parse("#+begin_src\n#+end_src").first_node::<SourceBlock>().unwrap();
+    /// let block = Org::parse(r#"
+    /// #+begin_src
+    /// #+end_src
+    /// "#).first_node::<SourceBlock>().unwrap();
     /// assert_eq!(block.value(), "");
-    /// let block = Org::parse("#+begin_src\n,* foo \n,#+ bar\n#+end_src").first_node::<SourceBlock>().unwrap();
-    /// assert_eq!(block.value(), "* foo \n#+ bar\n");
+    ///
+    /// let block = Org::parse(r#"
+    /// #+begin_src
+    /// ,* foo
+    /// ,#+ bar
+    /// #+end_src
+    /// "#).first_node::<SourceBlock>().unwrap();
+    /// assert_eq!(block.value(), "* foo\n#+ bar\n");
     /// ````
     pub fn value(&self) -> String {
         self.syntax
@@ -116,17 +125,25 @@ macro_rules! impl_content_border {
             /// Beginning position of block content
             pub fn content_start(&self) -> TextSize {
                 self.syntax
-                    .first_child()
+                    .children()
+                    .find(|n| n.kind() == SyntaxKind::BLOCK_BEGIN)
                     .map(|n| n.text_range().end())
-                    .unwrap_or_else(|| self.syntax.text_range().start())
+                    .unwrap_or_else(|| {
+                        debug_assert!(false, "block must contains BLOCK_BEGIN");
+                        TextSize::default()
+                    })
             }
 
             /// Ending position of block content
             pub fn content_end(&self) -> TextSize {
                 self.syntax
-                    .last_child()
+                    .children()
+                    .find(|n| n.kind() == SyntaxKind::BLOCK_END)
                     .map(|n| n.text_range().start())
-                    .unwrap_or_else(|| self.syntax.text_range().end())
+                    .unwrap_or_else(|| {
+                        debug_assert!(false, "block must contains BLOCK_END");
+                        TextSize::default()
+                    })
             }
         }
     };

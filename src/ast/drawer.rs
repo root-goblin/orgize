@@ -65,17 +65,25 @@ impl PropertyDrawer {
     /// Beginning position of drawer content
     pub fn content_start(&self) -> TextSize {
         self.syntax
-            .first_child()
+            .children()
+            .find(|n| n.kind() == SyntaxKind::DRAWER_BEGIN)
             .map(|n| n.text_range().end())
-            .unwrap_or_else(|| self.syntax.text_range().start())
+            .unwrap_or_else(|| {
+                debug_assert!(false, "property drawer must contains DRAWER_BEGIN");
+                TextSize::default()
+            })
     }
 
     /// Ending position of drawer content
     pub fn content_end(&self) -> TextSize {
         self.syntax
-            .last_child()
+            .children()
+            .find(|n| n.kind() == SyntaxKind::DRAWER_END)
             .map(|n| n.text_range().start())
-            .unwrap_or_else(|| self.syntax.text_range().end())
+            .unwrap_or_else(|| {
+                debug_assert!(false, "property drawer must contains DRAWER_END");
+                TextSize::default()
+            })
     }
 }
 
@@ -89,30 +97,36 @@ impl Drawer {
     /// ```
     pub fn name(&self) -> Token {
         self.syntax
-            .first_child()
-            .and_then(|n| {
-                n.children_with_tokens()
-                    .filter_map(|e| e.into_token())
-                    .find(|e| e.kind() == SyntaxKind::TEXT)
-            })
-            .map(|t| Token(Some(t)))
-            .unwrap_or_default()
+            .children()
+            .find(|n| n.kind() == SyntaxKind::DRAWER_BEGIN)
+            .expect("drawer must contains DRAWER_BEGIN")
+            .children_with_tokens()
+            .find_map(filter_token(SyntaxKind::TEXT))
+            .expect("drawer begin must contains TEXT")
     }
 
     /// Beginning position of drawer content
     pub fn content_start(&self) -> TextSize {
         self.syntax
-            .first_child()
+            .children()
+            .find(|n| n.kind() == SyntaxKind::DRAWER_BEGIN)
             .map(|n| n.text_range().end())
-            .unwrap_or_else(|| self.syntax.text_range().start())
+            .unwrap_or_else(|| {
+                debug_assert!(false, "drawer must contains DRAWER_BEGIN");
+                TextSize::default()
+            })
     }
 
     /// Ending position of drawer content
     pub fn content_end(&self) -> TextSize {
         self.syntax
-            .last_child()
+            .children()
+            .find(|n| n.kind() == SyntaxKind::DRAWER_END)
             .map(|n| n.text_range().start())
-            .unwrap_or_else(|| self.syntax.text_range().end())
+            .unwrap_or_else(|| {
+                debug_assert!(false, "drawer must contains DRAWER_END");
+                TextSize::default()
+            })
     }
 
     /// Raw text of drawer content

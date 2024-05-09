@@ -1,6 +1,4 @@
-#[rustfmt::skip]
 mod generated;
-
 
 mod affiliated_keyword;
 mod block;
@@ -22,13 +20,6 @@ mod snippet;
 mod table;
 mod timestamp;
 
-use std::{
-    borrow::{Borrow, Cow},
-    fmt::Debug,
-    hash::Hash,
-    ops::Deref,
-};
-
 pub use generated::*;
 pub use headline::*;
 pub use rowan::ast::support::*;
@@ -38,7 +29,13 @@ use crate::{
     syntax::{SyntaxKind, SyntaxNode},
     SyntaxToken,
 };
-use rowan::{ast::AstNode, NodeOrToken, TextSize};
+use rowan::{ast::AstNode, NodeOrToken, TextRange, TextSize};
+use std::{
+    borrow::{Borrow, Cow},
+    fmt,
+    hash::Hash,
+    ops::Deref,
+};
 
 pub fn blank_lines(parent: &SyntaxNode) -> usize {
     parent
@@ -59,64 +56,61 @@ pub fn last_token(parent: &SyntaxNode, kind: SyntaxKind) -> Option<Token> {
 }
 
 pub fn token(parent: &SyntaxNode, kind: SyntaxKind) -> Option<Token> {
-    rowan::ast::support::token(parent, kind).map(|t| Token(Some(t)))
+    rowan::ast::support::token(parent, kind).map(Token)
 }
 
 pub fn filter_token(
     kind: SyntaxKind,
 ) -> impl Fn(NodeOrToken<SyntaxNode, SyntaxToken>) -> Option<Token> {
     move |elem| match elem {
-        NodeOrToken::Token(tk) if tk.kind() == kind => Some(Token(Some(tk))),
+        NodeOrToken::Token(tk) if tk.kind() == kind => Some(Token(tk)),
         _ => None,
     }
 }
 
-/// A simple wrapper of `Option<SyntaxToken>`
+/// A simple wrapper of `SyntaxToken`
 ///
-/// It acts like a `token.text()` when inner is `Some(token)`, and an empty string when `None`.
-#[derive(Default, Eq, Clone)]
-pub struct Token(pub(crate) Option<SyntaxToken>);
+/// It implements the `AsRef<str>` and `Display` trait,
+/// allowing to directly use some `str` methods.
+///
+/// Also it implements `Hash` and `Eq` traits, so can be
+/// used as keys in `HashMap`. However, note that it only
+/// compares the underlying text inside `SyntaxToken`,
+/// meaning two `Token`s from different positions
+/// might be considered equal.
+#[derive(Eq, Clone)]
+pub struct Token(pub(crate) SyntaxToken);
 
 impl Token {
-    pub fn syntax(&self) -> Option<&SyntaxToken> {
-        self.0.as_ref()
+    pub fn syntax(&self) -> &SyntaxToken {
+        &self.0
     }
-}
 
-impl Token {
+    /// Range of this token
+    pub fn text_range(&self) -> TextRange {
+        self.0.text_range()
+    }
+
+    /// Beginning position of this token
     pub fn start(&self) -> TextSize {
-        match &self.0 {
-            Some(t) => t.text_range().start(),
-            None => TextSize::new(0),
-        }
+        self.0.text_range().start()
     }
 
+    /// Ending position of this token
     pub fn end(&self) -> TextSize {
-        match &self.0 {
-            Some(t) => t.text_range().end(),
-            None => TextSize::new(0),
-        }
+        self.0.text_range().end()
     }
 }
 
 impl AsRef<str> for Token {
     fn as_ref(&self) -> &str {
-        match &self.0 {
-            Some(t) => t.text(),
-            None => "",
-        }
+        self.0.text()
     }
 }
 
 impl Borrow<str> for Token {
     fn borrow(&self) -> &str {
         self.as_ref()
-    }
-}
-
-impl Debug for Token {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        self.as_ref().fmt(f)
     }
 }
 
@@ -162,5 +156,17 @@ impl Deref for Token {
     #[inline]
     fn deref(&self) -> &str {
         self.as_ref()
+    }
+}
+
+impl fmt::Debug for Token {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Debug::fmt(self.0.text(), f)
+    }
+}
+
+impl fmt::Display for Token {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(self.0.text(), f)
     }
 }

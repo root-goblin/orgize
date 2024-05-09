@@ -85,10 +85,7 @@ impl ListItem {
         self.syntax
             .children_with_tokens()
             .find_map(filter_token(SyntaxKind::LIST_ITEM_BULLET))
-            .unwrap_or_else(|| {
-                debug_assert!(false, "list item must contains LIST_ITEM_BULLET");
-                Token::default()
-            })
+            .expect("list item must contains LIST_ITEM_BULLET")
     }
 
     /// ```rust

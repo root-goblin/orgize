@@ -15,10 +15,7 @@ impl Macros {
         self.syntax
             .children_with_tokens()
             .find_map(filter_token(SyntaxKind::TEXT))
-            .unwrap_or_else(|| {
-                debug_assert!(false, "macros must contains TEXT");
-                Token::default()
-            })
+            .expect("macros must contains TEXT")
     }
 
     /// ```rust

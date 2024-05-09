@@ -210,7 +210,7 @@ pub trait Traverser {
             }
             SyntaxElement::Token(token) => {
                 if token.kind() == TEXT {
-                    self.event(Event::Text(Token(Some(token))), ctx);
+                    self.event(Event::Text(Token(token)), ctx);
                     take_control!();
                 }
             }

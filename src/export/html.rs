@@ -132,11 +132,15 @@ impl Traverser for HtmlExport {
             Event::Leave(Container::Code(_)) => self.output += "</code>",
 
             Event::Enter(Container::SourceBlock(block)) => {
-                let _ = write!(
-                    &mut self.output,
-                    r#"<pre><code class="language-{}">"#,
-                    HtmlEscape(&block.language().unwrap_or_default())
-                );
+                if let Some(language) = block.language() {
+                    let _ = write!(
+                        &mut self.output,
+                        r#"<pre><code class="language-{}">"#,
+                        HtmlEscape(&language)
+                    );
+                } else {
+                    self.output += r#"<pre><code>"#
+                }
             }
             Event::Leave(Container::SourceBlock(_)) => self.output += "</code></pre>",
 

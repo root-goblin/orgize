@@ -1,6 +1,6 @@
-use rowan::ast::{support, AstNode};
+use rowan::ast::AstNode;
 
-use super::{AffiliatedKeyword, Link, Paragraph, Token};
+use super::{token, AffiliatedKeyword, Link, Paragraph, Token};
 use crate::{syntax::SyntaxKind, SyntaxElement};
 
 impl Link {
@@ -17,13 +17,7 @@ impl Link {
     /// assert_eq!(link.path(), "https://google.com");
     /// ```
     pub fn path(&self) -> Token {
-        support::token(&self.syntax, SyntaxKind::LINK_PATH).map_or_else(
-            || {
-                debug_assert!(false, "link must contains LINK_PATH");
-                Token::default()
-            },
-            |e| Token(Some(e)),
-        )
+        token(&self.syntax, SyntaxKind::LINK_PATH).expect("link must contains LINK_PATH")
     }
 
     /// Returns `true` if link contains description

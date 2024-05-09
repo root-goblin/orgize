@@ -15,7 +15,7 @@ fn main() {
     let content = fs::read_to_string(&args[1]).unwrap();
 
     let mut export = MarkdownExport::default();
-    Org::parse(&content).traverse(&mut export);
+    Org::parse(content).traverse(&mut export);
 
     fs::write(format!("{}.md", &args[1]), export.finish()).unwrap();
 

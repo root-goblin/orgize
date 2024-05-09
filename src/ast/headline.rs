@@ -27,7 +27,7 @@ impl Headline {
             .find_map(filter_token(SyntaxKind::HEADLINE_STARS))
             .map_or_else(
                 || {
-                    debug_assert!(false, "headline must contains starts token");
+                    debug_assert!(false, "headline must contains HEADLINE_STARS");
                     0
                 },
                 |stars| stars.len(),
@@ -48,7 +48,7 @@ impl Headline {
                     if tk.kind() == SyntaxKind::HEADLINE_KEYWORD_TODO
                         || tk.kind() == SyntaxKind::HEADLINE_KEYWORD_DONE =>
                 {
-                    Some(Token(Some(tk)))
+                    Some(Token(tk))
                 }
                 _ => None,
             })

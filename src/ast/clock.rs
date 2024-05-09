@@ -24,9 +24,9 @@ impl Clock {
             .skip_while(|t| t.kind() != SyntaxKind::DOUBLE_ARROW)
             .skip(1)
             .find(|t| t.kind() != SyntaxKind::WHITESPACE)
-            .map(|e| {
-                debug_assert!(e.kind() == SyntaxKind::TEXT);
-                Token(e.into_token())
+            .and_then(|e| {
+                debug_assert_eq!(e.kind(), SyntaxKind::TEXT);
+                Some(Token(e.into_token()?))
             })
     }
 

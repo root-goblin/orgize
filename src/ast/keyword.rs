@@ -14,10 +14,7 @@ impl Keyword {
         self.syntax
             .children_with_tokens()
             .find_map(filter_token(SyntaxKind::TEXT))
-            .unwrap_or_else(|| {
-                debug_assert!(false, "keyword must contains TEXT");
-                Token::default()
-            })
+            .expect("keyword must contains TEXT")
     }
 
     ///
@@ -34,6 +31,6 @@ impl Keyword {
             .children_with_tokens()
             .filter_map(filter_token(SyntaxKind::TEXT))
             .nth(1)
-            .unwrap_or_default()
+            .expect("keyword must contains two TEXT")
     }
 }

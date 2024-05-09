@@ -13,10 +13,7 @@ impl Snippet {
         self.syntax
             .children_with_tokens()
             .find_map(filter_token(SyntaxKind::TEXT))
-            .unwrap_or_else(|| {
-                debug_assert!(false, "snippet must contains TEXT");
-                Token::default()
-            })
+            .expect("snippet must contains TEXT")
     }
 
     /// ```rust
@@ -32,9 +29,6 @@ impl Snippet {
             .children_with_tokens()
             .filter_map(filter_token(SyntaxKind::TEXT))
             .nth(1)
-            .unwrap_or_else(|| {
-                debug_assert!(false, "snippet must contains two TEXT");
-                Token::default()
-            })
+            .expect("snippet must contains two TEXT")
     }
 }
