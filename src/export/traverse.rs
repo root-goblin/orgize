@@ -199,6 +199,8 @@ pub trait Traverser {
                     SUBSCRIPT => walk!(Subscript),
                     KEYWORD => walk!(Keyword),
                     PROPERTY_DRAWER => walk!(PropertyDrawer),
+                    #[cfg(feature = "syntax-org-fc")]
+                    CLOZE => walk!(@Cloze),
                     BLOCK_CONTENT | LIST_ITEM_CONTENT => {
                         for child in node.children_with_tokens() {
                             self.element(child, ctx);
