@@ -6,7 +6,6 @@ const nodes = [
     first_child: [
       ["section", "Section"],
       ["first_headline", "Headline"],
-      ["properties", "PropertyDrawer"],
     ],
     last_child: [["last_headline", "Headline"]],
     children: [["headlines", "Headline"]],

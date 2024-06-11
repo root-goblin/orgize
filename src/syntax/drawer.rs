@@ -109,9 +109,10 @@ fn node_property_node(input: Input) -> IResult<Input, GreenElement, ()> {
     let (input, ws1) = space0(input)?;
     let (input, colon1) = colon_token(input)?;
     let (input, (colon2, name)) = map(
-        verify(take_while1(|c| c != ' ' && c != '\t'), |i: &Input| {
-            i.ends_with(':')
-        }),
+        verify(
+            take_while1(|c| c != ' ' && c != '\t' && c != '\n' && c != '\r'),
+            |i: &Input| i.ends_with(':'),
+        ),
         |input: Input| input.take_split(input.len() - 1),
     )(input)?;
     let (input, ws2) = space1(input)?;

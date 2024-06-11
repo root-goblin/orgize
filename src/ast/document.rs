@@ -2,7 +2,7 @@ use rowan::ast::AstNode;
 
 use crate::Org;
 
-use super::{Document, Keyword};
+use super::{Document, Keyword, PropertyDrawer};
 
 impl Document {
     /// Returns an iterator of keywords in zeroth section
@@ -54,6 +54,24 @@ impl Document {
                 s.push_str(cur.value().trim());
                 Some(s)
             })
+    }
+
+    /// Returns top-level properties drawer
+    ///
+    /// ```rust
+    /// use orgize::{Org, ast::Document};
+    ///
+    /// let org = Org::parse(r#":PROPERTIES:
+    /// :ID:       20220718T085035.042592
+    /// :END:
+    /// #+TITLE: Complete Computing"#);
+    ///
+    /// let properties = org.document().properties().unwrap();
+    /// assert_eq!(properties.to_hash_map().len(), 1);
+    /// assert_eq!(properties.get("ID").unwrap(), "20220718T085035.042592");
+    /// ```
+    pub fn properties(&self) -> Option<PropertyDrawer> {
+        rowan::ast::support::child(&self.syntax)
     }
 }
 
