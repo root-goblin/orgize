@@ -128,8 +128,16 @@ pub fn minimal_object_nodes(input: Input) -> Vec<GreenElement> {
             b'~' if emphasis::verify_pre(pre.s) => code_node(i),
             b'$' => latex_fragment_node(i),
             b'\\' => entity_node(i).or_else(|_| latex_fragment_node(i)),
-            b'^' if subscript_superscript::verify_pre(pre.s) => superscript_node(i),
-            b'_' if subscript_superscript::verify_pre(pre.s) => subscript_node(i),
+            b'^' if !input.c.use_sub_superscript.is_nil()
+                && subscript_superscript::verify_pre(pre.s) =>
+            {
+                superscript_node(i)
+            }
+            b'_' if !input.c.use_sub_superscript.is_nil()
+                && subscript_superscript::verify_pre(pre.s) =>
+            {
+                subscript_node(i)
+            }
             _ => Err(nom::Err::Error(())),
         },
         input,

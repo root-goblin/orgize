@@ -1,6 +1,27 @@
 use crate::syntax::document::document_node;
 use crate::Org;
 
+#[derive(Clone, Debug)]
+pub enum UseSubSuperscript {
+    Nil,
+    Brace,
+    True,
+}
+
+impl UseSubSuperscript {
+    pub fn is_nil(&self) -> bool {
+        matches!(self, UseSubSuperscript::Nil)
+    }
+
+    pub fn is_true(&self) -> bool {
+        matches!(self, UseSubSuperscript::True)
+    }
+
+    pub fn is_brace(&self) -> bool {
+        matches!(self, UseSubSuperscript::Brace)
+    }
+}
+
 /// Parse configuration
 #[derive(Clone, Debug)]
 pub struct ParseConfig {
@@ -10,6 +31,15 @@ pub struct ParseConfig {
     pub dual_keywords: Vec<String>,
 
     pub parsed_keywords: Vec<String>,
+
+    /// Control sub/superscript parsing
+    ///
+    /// Equivalent to `org-use-sub-superscripts`
+    ///
+    /// - `UseSubSuperscript::Nil`: disable parsing
+    /// - `UseSubSuperscript::True`: enable parsing
+    /// - `UseSubSuperscript::Brace`: enable parsing, but braces are required
+    pub use_sub_superscript: UseSubSuperscript,
 
     /// Affiliated keywords
     ///
@@ -36,6 +66,7 @@ impl Default for ParseConfig {
             todo_keywords: (vec!["TODO".into()], vec!["DONE".into()]),
             dual_keywords: vec!["CAPTION".into(), "RESULTS".into()],
             parsed_keywords: vec!["CAPTION".into()],
+            use_sub_superscript: UseSubSuperscript::True,
             affiliated_keywords: vec![
                 "CAPTION".into(),
                 "DATA".into(),

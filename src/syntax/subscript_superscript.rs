@@ -24,23 +24,16 @@ pub fn superscript_node(input: Input) -> IResult<Input, GreenElement, ()> {
 
     let mut children = vec![caret];
 
-    if let Ok((input, star)) = tag::<&str, Input, ()>("*")(input) {
-        children.push(star.text_token());
-        Ok((input, node(SyntaxKind::SUPERSCRIPT, children)))
-    } else if let Ok((input, (l, contents, r))) = template1(input) {
-        children.push(l);
-        children.extend(standard_object_nodes(contents));
-        children.push(r);
-        Ok((input, node(SyntaxKind::SUPERSCRIPT, children)))
-    } else if let Ok((input, (sign, contents))) = template2(input) {
-        if let Some(s) = sign {
-            children.push(s)
-        }
-        children.push(contents);
-        Ok((input, node(SyntaxKind::SUPERSCRIPT, children)))
-    } else {
-        Err(nom::Err::Error(()))
+    if input.c.use_sub_superscript.is_brace() {
+        let (input, rest) = template1(input)?;
+        children.extend(rest);
+        return Ok((input, node(SyntaxKind::SUPERSCRIPT, children)));
     }
+
+    let (input, rest) = alt((template0, template1, template2))(input)?;
+    children.extend(rest);
+
+    Ok((input, node(SyntaxKind::SUPERSCRIPT, children)))
 }
 
 pub fn subscript_node(input: Input) -> IResult<Input, GreenElement, ()> {
@@ -48,33 +41,35 @@ pub fn subscript_node(input: Input) -> IResult<Input, GreenElement, ()> {
 
     let mut children = vec![underscore];
 
-    if let Ok((input, star)) = tag::<&str, Input, ()>("*")(input) {
-        children.push(star.text_token());
-        Ok((input, node(SyntaxKind::SUBSCRIPT, children)))
-    } else if let Ok((input, (l, contents, r))) = template1(input) {
-        children.push(l);
-        children.extend(standard_object_nodes(contents));
-        children.push(r);
-        Ok((input, node(SyntaxKind::SUBSCRIPT, children)))
-    } else if let Ok((input, (sign, contents))) = template2(input) {
-        if let Some(s) = sign {
-            children.push(s)
-        }
-        children.push(contents);
-        Ok((input, node(SyntaxKind::SUBSCRIPT, children)))
-    } else {
-        Err(nom::Err::Error(()))
+    if input.c.use_sub_superscript.is_brace() {
+        let (input, rest) = template1(input)?;
+        children.extend(rest);
+        return Ok((input, node(SyntaxKind::SUBSCRIPT, children)));
     }
+
+    let (input, rest) = alt((template0, template1, template2))(input)?;
+    children.extend(rest);
+
+    Ok((input, node(SyntaxKind::SUBSCRIPT, children)))
 }
 
-fn template1(input: Input) -> IResult<Input, (GreenElement, Input, GreenElement), ()> {
+fn template0(input: Input) -> IResult<Input, Vec<GreenElement>, ()> {
+    let (input, star) = tag("*")(input)?;
+    Ok((input, vec![star.text_token()]))
+}
+
+fn template1(input: Input) -> IResult<Input, Vec<GreenElement>, ()> {
     let (input, l) = l_curly_token(input)?;
     let (input, contents) = balanced_brackets(input)?;
     let (input, r) = r_curly_token(input)?;
-    Ok((input, (l, contents, r)))
+    let mut children = vec![];
+    children.push(l);
+    children.extend(standard_object_nodes(contents));
+    children.push(r);
+    Ok((input, children))
 }
 
-fn template2(input: Input) -> IResult<Input, (Option<GreenElement>, GreenElement), ()> {
+fn template2(input: Input) -> IResult<Input, Vec<GreenElement>, ()> {
     let (input, sign) = opt(alt((tag("+"), tag("-"))))(input)?;
 
     let (input, contents) =
@@ -84,7 +79,15 @@ fn template2(input: Input) -> IResult<Input, (Option<GreenElement>, GreenElement
         return Err(nom::Err::Error(()));
     }
 
-    Ok((input, (sign.map(|x| x.text_token()), contents.text_token())))
+    let mut children = vec![];
+
+    if let Some(s) = sign {
+        children.push(s.text_token())
+    }
+
+    children.push(contents.text_token());
+
+    Ok((input, children))
 }
 
 fn balanced_brackets(input: Input) -> IResult<Input, Input, ()> {
@@ -113,6 +116,7 @@ pub fn verify_pre(s: &str) -> bool {
 #[test]
 fn parse() {
     use crate::ast::Subscript;
+    use crate::config::{ParseConfig, UseSubSuperscript};
     use crate::tests::to_ast;
 
     let to_subscript = to_ast::<Subscript>(subscript_node);
@@ -158,4 +162,14 @@ fn parse() {
       TEXT@1..4 "abc"
     "###
     );
+
+    let with_brace = ParseConfig {
+        use_sub_superscript: UseSubSuperscript::Brace,
+        ..Default::default()
+    };
+
+    debug_assert!(subscript_node(("_*", &with_brace).into()).is_err());
+    debug_assert!(subscript_node(("_abc", &with_brace).into()).is_err());
+    debug_assert!(subscript_node(("_+123", &with_brace).into()).is_err());
+    debug_assert!(subscript_node(("_{*bo\nld*}", &with_brace).into()).is_ok());
 }
