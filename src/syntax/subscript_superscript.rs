@@ -105,7 +105,11 @@ fn balanced_brackets(input: Input) -> IResult<Input, Input, ()> {
     Err(nom::Err::Error(()))
 }
 
-pub fn verify_pre(s: &str) -> bool {
+pub fn verify_pre(i: &Input) -> bool {
+    if i.c.use_sub_superscript.is_nil() {
+        return false;
+    }
+    let s = i.s;
     if s.is_empty() {
         return false;
     }

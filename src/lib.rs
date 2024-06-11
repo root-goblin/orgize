@@ -1,7 +1,7 @@
 #![doc = include_str!("../README.md")]
 
 pub mod ast;
-mod config;
+pub mod config;
 mod entities;
 pub mod export;
 mod org;
